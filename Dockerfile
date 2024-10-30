@@ -16,7 +16,7 @@ FROM base AS build
 WORKDIR /app
 
 # Copy only the files needed for dependency resolution
-COPY pyproject.toml poetry.lock ./
+COPY pyproject.toml ./
 RUN poetry install --no-root --only main
 
 # Copy the rest of your application code
