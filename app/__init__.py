@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, redirect
 from flask_mail import Mail
 from flask_migrate import Migrate
 from app.config.connector import db, migrate, jwt,mail  # Import extensions
@@ -21,16 +21,16 @@ def create_app():
     mail.init_app(app)
     
     Swagger(app, 
-    template={
+        template = {
             "swagger": "2.0",
             "info": {
                 "title": "Revou Bank API",
                 "description": "Revou Bank API made by Flask and MySQL",
                 "contact": {
-                "responsibleOrganization": "ME",
-                "responsibleDeveloper": "Me",
-                "email": "me@me.com",
-                "url": "www.me.com",
+                    "responsibleOrganization": "ME",
+                    "responsibleDeveloper": "Me",
+                    "email": "me@me.com",
+                    "url": "www.me.com",
                 }
             },
             "securityDefinitions": {
@@ -42,7 +42,8 @@ def create_app():
                 }
             },
             "security": [
-                {"bearerAuth": []}
+                {"bearerAuth": []},
+                {"twoFAAuth": []}
             ],
         }
     )
@@ -59,7 +60,7 @@ def create_app():
     # Define basic routes for DB creation and seeding
     @app.route('/')
     def index():
-        return 'hello'
+        return redirect('/apidocs/#/')
     
     @app.route('/create-all-db')
     def create_all_db():

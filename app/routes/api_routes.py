@@ -38,7 +38,6 @@ transaction_bp.add_url_rule('/', view_func=token_required(two_fa_required(Transa
 
 
 
-# Define protected routes for RoleController methods
 role_bp.add_url_rule('/', view_func=token_required(two_fa_required(RoleController.get_all_roles)), methods=['GET'])
 role_bp.add_url_rule('/<int:role_id>', view_func=token_required(two_fa_required(RoleController.get_role_by_id)), methods=['GET'])
 role_bp.add_url_rule('/', view_func=token_required(two_fa_required(RoleController.add_role)), methods=['POST'])

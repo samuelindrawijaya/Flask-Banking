@@ -6,18 +6,27 @@ from flask_jwt_extended import (
     create_access_token, 
     create_refresh_token, 
     get_jwt_identity, 
-    jwt_required, 
-    verify_jwt_in_request
+    jwt_required
 )
 from app.services.user_services import UserService
 from app.utils.response import Response
 from flask_mail import Message
 from app import mail
 from functools import wraps
-from werkzeug.security import generate_password_hash, check_password_hash  # For password hashing
+from werkzeug.security import generate_password_hash, check_password_hash
+from flasgger import swag_from
+from app.docs.auth_swagger_specs import (
+    login_spec, 
+    verify_2fa_spec, 
+    logout_spec, 
+    enable_2fa_spec, 
+    refresh_token_spec
+)
 
 class AuthController:
+    
     @staticmethod
+    @swag_from(login_spec)
     def login():
         
         data = request.get_json()
@@ -56,6 +65,7 @@ class AuthController:
         }, 200)
 
     @staticmethod
+    @swag_from(verify_2fa_spec)
     def verify_2fa():
         data = request.get_json()
         user_id = get_jwt_identity()['user_id']
@@ -80,6 +90,7 @@ class AuthController:
 
 
     @staticmethod
+    @swag_from(logout_spec)
     def logout():
         user_id = get_jwt_identity()['user_id']
         user = UserService.get_user_by_id(user_id)
@@ -89,6 +100,7 @@ class AuthController:
         return Response.success({'message': 'Logged out successfully'}, 200)
 
     @staticmethod
+    @swag_from(enable_2fa_spec)
     def enable_2fa():
         user_id = get_jwt_identity()['user_id']
         user = UserService.get_user_by_id(user_id)
@@ -118,6 +130,7 @@ class AuthController:
             return Response.error(f"Error sending email: {str(e)}", 500)
 
     @staticmethod
+    @swag_from(refresh_token_spec)
     @jwt_required(refresh=True)
     def refresh_token():
         identity = get_jwt_identity()

@@ -1,40 +1,52 @@
 import random
 from app.models.account_models import Account
 from app.config.connector import db
-
+from datetime import datetime
 class AccountServices:
     
     @staticmethod
     def get_all_accounts():
-        return Account.query.all() 
+        return Account.query.filter_by(is_deleted=False).all()  
     
     @staticmethod
     def get_accounts_by_user(user_id):
-        return Account.query.filter_by(user_id=user_id).all()
+        return Account.query.filter_by(user_id=user_id, is_deleted=False).all()  
 
     @staticmethod
     def get_account_by_id(account_id):
-        return Account.query.get(account_id)
+        account = Account.query.get(account_id)
+        return account if account and not account.is_deleted else None 
 
     @staticmethod
-    def create_account(user_id, account_type, balance):
-        account = Account(user_id=user_id, account_type=account_type, account_number=random.randint(1000000000, 9999999999), balance=balance)
+    def create_account(user_id, account_type, balance=0):
+        account = Account(
+            user_id=user_id,
+            account_type=account_type,
+            account_number=str(random.randint(1000000000, 9999999999)),
+            balance=balance,
+            is_deleted=False  # Default
+        )
         db.session.add(account)
         db.session.commit()
         return account
 
     @staticmethod
+
+
     def update_account(account_id, data):
         account = Account.query.get(account_id)
-        if 'account_type' in data:
-            account.account_type = data['account_type']
-        if 'balance' in data:
-            account.balance = data['balance']
+        if not account:
+            return None  
+        if 'account_number' in data:
+            account.account_number = data['account_number']
+        account.updated_at = datetime.utcnow()
+
         db.session.commit()
         return account
 
+
     @staticmethod
-    def delete_account(account_id):
+    def soft_delete_account(account_id):
         account = Account.query.get(account_id)
-        db.session.delete(account)
+        account.is_deleted = True
         db.session.commit()

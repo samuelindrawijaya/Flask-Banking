@@ -11,7 +11,7 @@ class Account(db.Model):
     balance = db.Column(db.Numeric(10, 2), nullable=False, default=0.00)
     created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     updated_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
-
+    is_deleted = db.Column(db.Boolean, default=False, nullable=False)
     # Define the relationships with explicit overlaps
     transactions_from = db.relationship('Transaction', foreign_keys='Transaction.from_account_id', back_populates='from_account')
     transactions_to = db.relationship('Transaction', foreign_keys='Transaction.to_account_id', back_populates='to_account')
