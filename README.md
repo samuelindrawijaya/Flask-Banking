@@ -22,7 +22,7 @@ This project is a RESTful API built with Flask to manage financial data. It incl
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/Flask-FinancialManagementAPI
+   git clone https://github.com/samuelindrawijaya/Flask-Banking.git
    ```
 
 2. **Install requirements**:
@@ -85,4 +85,4 @@ This project is a RESTful API built with Flask to manage financial data. It incl
 #### Deployment Link
 > [!IMPORTANT]
 > Access the API documentation here:
-https://your-deployment-link.com/apidocs/#
+https://victorious-delora-revou-milestone4-c2c03d3b.koyeb.app/apidocs/#/
