@@ -1,4 +1,7 @@
 from flask import Blueprint
+from app.controller.TransactionCategoryController import TransactionCategoryController
+from app.controller.bill_controller import BillController
+from app.controller.budget_controller import BudgetController
 from app.controller.role_controller import RoleController
 from app.controller.user_controller import UserController
 from app.controller.account_controller import AccountController
@@ -11,6 +14,25 @@ account_bp = Blueprint('accounts', __name__)
 transaction_bp = Blueprint('transactions', __name__)
 auth_bp = Blueprint('auth', __name__)  # Add auth routes
 role_bp = Blueprint('roles', __name__)
+bill_bp = Blueprint('bills', __name__)
+budget_bp = Blueprint('budgets', __name__)
+transaction_category_bp = Blueprint('transaction_categories', __name__)
+
+budget_bp.add_url_rule('/', view_func=token_required(two_fa_required(BudgetController.get_all_budgets)), methods=['GET'])
+budget_bp.add_url_rule('/', view_func=token_required(two_fa_required(BudgetController.create_budget)), methods=['POST'])
+budget_bp.add_url_rule('/<int:budget_id>', view_func=token_required(two_fa_required(BudgetController.update_budget)), methods=['PUT'])
+
+transaction_category_bp.add_url_rule('/', view_func=token_required(two_fa_required(TransactionCategoryController.get_all_categories)), methods=['GET'])
+transaction_category_bp.add_url_rule('/<int:category_id>', view_func=token_required(two_fa_required(TransactionCategoryController.get_category_by_id)), methods=['GET'])
+transaction_category_bp.add_url_rule('/', view_func=token_required(two_fa_required(TransactionCategoryController.create_category)), methods=['POST'])
+transaction_category_bp.add_url_rule('/<int:category_id>', view_func=token_required(two_fa_required(TransactionCategoryController.update_category)), methods=['PUT'])
+transaction_category_bp.add_url_rule('/<int:category_id>', view_func=token_required(two_fa_required(TransactionCategoryController.delete_category)), methods=['DELETE'])
+
+bill_bp.add_url_rule('/', view_func=token_required(two_fa_required(BillController.get_all_bills)), methods=['GET'])
+bill_bp.add_url_rule('/', view_func=token_required(two_fa_required(BillController.create_bill)), methods=['POST'])
+bill_bp.add_url_rule('/<int:bill_id>', view_func=token_required(two_fa_required(BillController.update_bill)), methods=['PUT'])
+bill_bp.add_url_rule('/<int:bill_id>', view_func=token_required(two_fa_required(BillController.delete_bill)), methods=['DELETE'])
+bill_bp.add_url_rule('/process-due', view_func=token_required(two_fa_required(BillController.process_due_bills)), methods=['POST'])
 
 # Authentication Routes
 auth_bp.add_url_rule('/login', view_func=AuthController.login, methods=['POST'])

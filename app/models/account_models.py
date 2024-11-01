@@ -12,7 +12,7 @@ class Account(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
     updated_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
     is_deleted = db.Column(db.Boolean, default=False, nullable=False)
-    # Define the relationships with explicit overlaps
+    last_deposit_time = db.Column(db.DateTime, nullable=True)
     transactions_from = db.relationship('Transaction', foreign_keys='Transaction.from_account_id', back_populates='from_account')
     transactions_to = db.relationship('Transaction', foreign_keys='Transaction.to_account_id', back_populates='to_account')
 
@@ -23,5 +23,7 @@ class Account(db.Model):
             'account_number': self.account_number,
             'balance': str(self.balance),
             'created_at': self.created_at.isoformat(),
+            'updated_at' : self.updated_at.isoformat(),
+            'last_deposit_time': self.last_deposit_time.isoformat() if self.last_deposit_time else None,
             'transactions': [transaction.to_dict() for transaction in self.transactions_from + self.transactions_to]
         }

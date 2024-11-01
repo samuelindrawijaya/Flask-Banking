@@ -49,13 +49,16 @@ def create_app():
     )
     
     # Register Blueprints
-    from app.routes.api_routes import user_bp, account_bp, transaction_bp, auth_bp, role_bp
+    from app.routes.api_routes import user_bp, account_bp, transaction_bp, auth_bp, role_bp,bill_bp,budget_bp,transaction_category_bp
 
     app.register_blueprint(user_bp, url_prefix='/api/users')
     app.register_blueprint(account_bp, url_prefix='/api/accounts')
     app.register_blueprint(transaction_bp, url_prefix='/api/transactions')
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(role_bp, url_prefix='/api/roles')
+    app.register_blueprint(bill_bp, url_prefix='/api/bills')
+    app.register_blueprint(budget_bp, url_prefix='/api/budgets')
+    app.register_blueprint(transaction_category_bp, url_prefix='/api/transactions/category')
     
     # Define basic routes for DB creation and seeding
     @app.route('/')

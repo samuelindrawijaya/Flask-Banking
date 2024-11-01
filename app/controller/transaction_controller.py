@@ -3,7 +3,7 @@ from app.services.transaction_services import TransactionService
 from app.services.account_services import AccountServices
 from flask import request
 from flask_jwt_extended import get_jwt_identity
-from app.utils.check_transaction import validate_transaction
+from app.utils.validator_transaction import validate_transaction
 from app.utils.response import Response
 from flasgger import swag_from
 from app.docs.transaction_swagger_specs import (
@@ -46,22 +46,21 @@ class TransactionController:
     def create_transaction():
         data = request.get_json()
         required_fields = ['from_account_id', 'amount', 'transaction_type']
-        
-       
+
+        # Check for required fields in data
         for field in required_fields:
             if field not in data or data[field] is None:
                 return Response.error(f'{field} is required and cannot be null', 400)
-        
+
+        # Validate amount format
         if not isinstance(data['amount'], (int, float)) or data['amount'] <= 0:
             return Response.error('Invalid amount: Amount must be a positive number', 400)
 
-        
+
         user_id = get_jwt_identity()['user_id']
-        validator = validate_transaction(data, user_id)
-        validation_error = validator.validate()
+        validation_error = validate_transaction(data, user_id)
         if validation_error:
             return validation_error
 
-        # Create transaction and return response
         transaction = TransactionService.create_transaction(data)
         return Response.success(transaction.to_dict(), 201)

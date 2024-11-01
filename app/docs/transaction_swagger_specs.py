@@ -16,13 +16,15 @@ get_all_transactions_admin_spec = {
                         "to_account_id": {"type": "integer", "example": 102},
                         "amount": {"type": "number", "format": "float", "example": 500.50},
                         "transaction_type": {"type": "string", "example": "transfer"},
+                        "category_id": {"type": "integer", "description": "ID of the transaction category", "example": 1},
+                        "bill_id": {"type": "integer", "description": "ID of the associated bill (if applicable)", "example": 2},
                         "created_at": {"type": "string", "format": "date-time", "example": "2023-10-01T12:30:00Z"},
                     },
                 },
             },
         },
-        "403": {"description": "Unauthorized access (admin only)"}
-    }
+        "403": {"description": "Unauthorized access (admin only)"},
+    },
 }
 
 get_all_transactions_spec = {
@@ -41,13 +43,15 @@ get_all_transactions_spec = {
                         "to_account_id": {"type": "integer", "example": 102},
                         "amount": {"type": "number", "format": "float", "example": 500.50},
                         "transaction_type": {"type": "string", "example": "transfer"},
+                        "category_id": {"type": "integer", "description": "ID of the transaction category", "example": 1},
+                        "bill_id": {"type": "integer", "description": "ID of the associated bill (if applicable)", "example": 2},
                         "created_at": {"type": "string", "format": "date-time", "example": "2023-10-01T12:30:00Z"},
                     },
                 },
             },
         },
         "403": {"description": "Unauthorized access"},
-    }
+    },
 }
 
 get_transaction_by_id_spec = {
@@ -73,13 +77,15 @@ get_transaction_by_id_spec = {
                     "to_account_id": {"type": "integer", "example": 102},
                     "amount": {"type": "number", "format": "float", "example": 500.50},
                     "transaction_type": {"type": "string", "example": "transfer"},
+                    "category_id": {"type": "integer", "description": "ID of the transaction category", "example": 1},
+                    "bill_id": {"type": "integer", "description": "ID of the associated bill (if applicable)", "example": 2},
                     "created_at": {"type": "string", "format": "date-time", "example": "2023-10-01T12:30:00Z"},
                 },
             },
         },
         "404": {"description": "Transaction not found"},
         "403": {"description": "Unauthorized access"},
-    }
+    },
 }
 
 create_transaction_spec = {
@@ -102,7 +108,9 @@ create_transaction_spec = {
                         "description": "Type of transaction",
                         "example": "transfer"
                     },
-                    "description": {"type": "string", "description": "Optional description of the transaction", "example": "Monthly transfer"},
+                    "category_id": {"type": "integer", "description": "ID of the transaction category", "example": 1},
+                    "bill_id": {"type": "integer", "description": "ID of the associated bill (if applicable)", "example": 2},
+                    "description": {"type": "string", "description": "Optional description of the transaction", "example": "Monthly rent"},
                 }
             }
         }
@@ -118,6 +126,8 @@ create_transaction_spec = {
                     "to_account_id": {"type": "integer", "description": "ID of the account receiving funds", "example": 102},
                     "amount": {"type": "number", "format": "float", "description": "Transaction amount", "example": 500.50},
                     "transaction_type": {"type": "string", "description": "Type of transaction", "example": "transfer"},
+                    "category_id": {"type": "integer", "description": "ID of the transaction category", "example": 1},
+                    "bill_id": {"type": "integer", "description": "ID of the associated bill (if applicable)", "example": 2},
                     "created_at": {"type": "string", "format": "date-time", "example": "2023-10-01T12:30:00Z"},
                 }
             }

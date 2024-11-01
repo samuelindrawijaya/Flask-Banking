@@ -6,13 +6,14 @@ class Transaction(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     from_account_id = db.Column(db.Integer, db.ForeignKey('accounts.id'), nullable=False)
-    to_account_id = db.Column(db.Integer, db.ForeignKey('accounts.id'), nullable=False)
+    to_account_id = db.Column(db.Integer, db.ForeignKey('accounts.id'), nullable=True)
     amount = db.Column(db.Numeric(10, 2), nullable=False)
     transaction_type = db.Column(db.String(255), nullable=False)
     description = db.Column(db.String(255), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
-
+    category_id = db.Column(db.Integer, db.ForeignKey('transactions_categories.id'), nullable=True)
+    bill_id = db.Column(db.Integer, db.ForeignKey('bills.id'), nullable=True)  # Link to bill payments
     # Relationships with explicit overlaps to resolve conflicts
     from_account = db.relationship('Account', back_populates='transactions_from', foreign_keys=[from_account_id])
 
@@ -26,6 +27,7 @@ class Transaction(db.Model):
             'to_account_id': self.to_account_id,
             'amount': str(self.amount),
             'transaction_type': self.transaction_type,
-            'description': self.description,
+            'category_id': self.category_id,
+            'bill_id': self.bill_id,
             'created_at': self.created_at.isoformat()
         }

@@ -1,7 +1,7 @@
 from app.services.account_services import AccountServices
 from flask import jsonify, request
 from flask_jwt_extended import get_jwt_identity
-from app.utils.check_account import AccountValidator
+from app.utils.validator_account import AccountValidator
 from app.utils.response import Response
 from flasgger import swag_from
 from app.docs.account_swagger_specs import (
